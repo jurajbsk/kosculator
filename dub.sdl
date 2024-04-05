@@ -1,0 +1,16 @@
+name "sdc"
+description "A compiler front-end for the SoftD language"
+authors "Juraj B."
+copyright "Copyright (C) 2024, Juraj B."
+license "proprietary"
+
+dependency "crafstd" version="*"
+
+buildType "debug" {
+	buildOptions "debugMode" "debugInfo" "betterC"
+}
+buildType "release" {
+	buildOptions "releaseMode" "inline" "optimize" "warningsAsErrors" "betterC"
+}
+
+targetPath "bin/$BUILD_TYPE"
