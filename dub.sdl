@@ -8,7 +8,6 @@ dependency "crafstd" version="*"
 buildType "debug" {
 	buildOptions "debugMode" "debugInfo" "betterC"
 	libs "$LLVM_LIBS/LLVM-C"
-	
 }
 buildType "release" {
 	buildOptions "releaseMode" "inline" "optimize" "warningsAsErrors" "betterC"
