@@ -1,6 +1,5 @@
 module llvm.functions;
 
-import llvm.config;
 import llvm.types;
 
 private nothrow auto orEmpty(T)(T v)
@@ -38,6 +37,7 @@ private nothrow auto orEmpty(T)(T v)
 //     mixin(LLVM_Disassemblers.map!(t => "LLVMInitialize" ~ t ~ "Disassembler();").joiner.array.orEmpty);
 // }
 
+enum LLVM_NativeTarget = "X86";
 extern(C) {
 	mixin("void LLVMInitialize" ~ LLVM_NativeTarget ~ "TargetInfo();");
 	mixin("void LLVMInitialize" ~ LLVM_NativeTarget ~ "Target();");

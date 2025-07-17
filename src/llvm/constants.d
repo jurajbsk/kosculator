@@ -1,6 +1,5 @@
 module llvm.constants;
 
-import llvm.config;
 import llvm.types;
 
 /+ Analysis +/

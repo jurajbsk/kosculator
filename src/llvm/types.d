@@ -2,8 +2,10 @@ module llvm.types;
 
 public import std.stdint : uintptr_t;
 
-import llvm.config;
 import core.stdc.stdint;
+
+uint asVersion(uint a, uint b, uint c) => 0;
+enum LLVM_Version = 19;
 
 /+ Analysis +/
 

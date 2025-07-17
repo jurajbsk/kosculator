@@ -1,6 +1,5 @@
 module llvm.functions.link;
 
-import llvm.config;
 import llvm.types;
 import core.stdc.stdint;
 
