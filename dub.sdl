@@ -3,18 +3,16 @@ description "A custom compiler"
 authors "Juraj B."
 copyright "Copyright (C) 2025, Juraj B."
 license "proprietary"
-
-dependency "lib" version="*"
 buildType "debug" {
-	buildOptions "debugMode" "debugInfo" "betterC"
-	libs "$LLVM_LIBS/LLVM-C"
+	buildOptions "debugMode" "debugInfoC"
 }
 buildType "release" {
-	buildOptions "releaseMode" "inline" "optimize" "warningsAsErrors" "betterC"
-	sourceFiles "$LLVM_LIBS/*.lib"
-	libs "ntdll"
+	buildOptions "releaseMode" "inline" "optimize" "warningsAsErrors"
 }
-dflags "--flto=full" "--link-internally"
-copyFiles "$LLVM_BIN/LLVM-C.dll"
+libs "$LLVM_LIBS/LLVM-C"
+dependency "lib" version="*"
+dependency "llvm-d" version="*"
 targetPath "bin/$BUILD_TYPE"
 workingDirectory "bin/$BUILD_TYPE"
+dflags "--flto=full" "--link-internally" "-lowmem"
+copyFiles "$LLVM_BIN/LLVM-C.dll"

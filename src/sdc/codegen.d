@@ -21,6 +21,7 @@ LLVMTypeRef mapType(Token type)
 	}
 }
 
+extern(C) void* LLVMBuildLoad2(LLVMBuilderRef, LLVMTypeRef Ty, LLVMValueRef PointerVal, const char* Name);
 struct CodeGen {
 	LLVMContextRef context;
 	LLVMModuleRef mod;
