@@ -10,8 +10,9 @@ version(Windows) {
 extern(C) int main(int argc, char** args)
 {
 	// Handling args
-	/*string inPath, outPath;
-	for(ubyte i; i < argc; i++) {
+	string inPath, outPath, ip;
+	for(ubyte i; i < argc; i++)
+	{
 		string arg = parseCStr(args[i]);
 		switch(arg)
 		{
@@ -21,18 +22,16 @@ extern(C) int main(int argc, char** args)
 			} break;
 
 			default: {
-				if(arg[$-3..$] == ".d") {
-					inPath = arg;
-				}
+				inPath = arg;
 			} break;
 		}
-	} */
+	}
 
 	if(argc < 2) {
 		writeln("No source file specified.");
 		return -1;
 	}
-	void* file = CreateFileA(args[1], 0x80000000, 0x00000001, null, 3, 128, null);
+	void* file = CreateFileA(cast(char*)inPath.ptr, 0x80000000, 0x00000001, null, 3, 128, null);
 	if(cast(long)file == -1) {
 		writeln("No file named \"", parseCStr(args[1]), "\".");
 		return -1;
@@ -44,7 +43,13 @@ extern(C) int main(int argc, char** args)
 		import lib.time;
 		ulong time = getTicks();
 	}
-	compile(sourceCode);
+
+	Compiler compiler = Compiler(sourceCode);
+	bool done;
+	while(!done) {
+		done = compiler.compile();
+	}
+
 	debug {
 		writeln("Seconds elapsed: ", cast(ulong)(elapsed(time)*1000), "ms");
 	}
