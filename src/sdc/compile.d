@@ -85,7 +85,7 @@ struct Compiler {
 			case T.Ident: {
 				dataStack.add(ParseData(str: curStr));
 			} break;
-			case T.tVoid, T.i32, T.i64, T.str: {
+			case T.voidT, T.i32, T.i64, T.str: {
 				dataStack.add(ParseData(type: t));
 			} break;
 			case T.NumLit: {
@@ -204,7 +204,7 @@ struct Compiler {
 			case n.ReturnStmnt: {
 				switch(length) {
 					case 1: {
-						sem.checkRet(T.tVoid);
+						sem.checkRet(T.voidT);
 						gen.addRetVoid();
 					} break;
 					case 2: {
@@ -215,10 +215,28 @@ struct Compiler {
 					default: assert(0);
 				}
 			} break;
-			case n.Plus: {
+			case n.Add: {
 				ParseData rExpr = dataStack.pop();
 				ParseData lExpr = dataStack.pop();
 				void* value = gen.addPlus(lExpr.value, rExpr.value);
+				dataStack.add(ParseData(type: rExpr.type, value: value));
+			} break;
+			case n.Sub: {
+				ParseData rExpr = dataStack.pop();
+				ParseData lExpr = dataStack.pop();
+				void* value = gen.addSub(lExpr.value, rExpr.value);
+				dataStack.add(ParseData(type: rExpr.type, value: value));
+			} break;
+			case n.Mult: {
+				ParseData rExpr = dataStack.pop();
+				ParseData lExpr = dataStack.pop();
+				void* value = gen.addMul(lExpr.value, rExpr.value);
+				dataStack.add(ParseData(type: rExpr.type, value: value));
+			} break;
+			case n.Div: {
+				ParseData rExpr = dataStack.pop();
+				ParseData lExpr = dataStack.pop();
+				void* value = gen.addDiv(lExpr.value, rExpr.value, false);
 				dataStack.add(ParseData(type: rExpr.type, value: value));
 			} break;
 			case n.Var: {

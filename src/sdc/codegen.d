@@ -8,10 +8,13 @@ private alias T = Token;
 LLVMTypeRef mapType(Token type)
 {
 	switch(type) {
-		case T.tVoid: return LLVMVoidType();
+		case T.voidT: return LLVMVoidType();
 		case T.i32: return LLVMInt32Type();
 		case T.i64: return LLVMInt64Type();
 		case T.str: return LLVMPointerType(LLVMInt8Type, 0);
+		case T.pvoid: return LLVMPointerType(LLVMVoidType(), 64);
+		case T.i32p: return LLVMPointerType(LLVMInt32Type(), 64);
+		case T.i64p: return LLVMPointerType(LLVMInt64Type(), 64);
 
 		default: {
 			import lib.io;
@@ -30,12 +33,10 @@ struct CodeGen {
 	List!LLVMTypeRef buffer;
 
 	void initialize() {
-		// Initialize LLVM context, module, and builder
 		context = LLVMContextCreate();
 		mod = LLVMModuleCreateWithName("main_module");
 		builder = LLVMCreateBuilderInContext(context);
 
-		// Optional: Initialize targets (for code generation)
 		LLVMInitializeNativeTarget();
 	}
 

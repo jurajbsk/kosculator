@@ -70,17 +70,24 @@ enum Token : ubyte {
 	RParen,
 	Comma,
 	SemiCol,
+	Star,
+	Slash,
+
 	Assign,
 	Plus,
+	Minus,
 
 	Module,
 	Import,
 	Return,
 
-	tVoid,
+	voidT,
 	i32,
 	i64,
 	str,
+	pvoid,
+	i32p,
+	i64p,
 
 	Ident,
 	NumLit,
@@ -110,8 +117,14 @@ enum NonTerm : ubyte {
 	CallArgs,
 
 	Expr,
+	Parens,
+	Mult,
+	Div,
+	Add,
+	Sub,
+
+	Literal,
 	Term,
-	Plus,
 	Var,
 	Type,
 }
@@ -141,7 +154,7 @@ enum Rule[NonTerm.max+1] grammarTable = [
 	n.Args: l(n.Type, T.Ident) | l(n.Args, T.Comma, n.Type, T.Ident) | l(null),
 
 	n.StmntBody: l(T.LBrace, n.StmntList, T.RBrace),
-	n.StmntList: l(n.Stmnt) | l(n.Stmnt, n.StmntList),
+	n.StmntList: l(n.Stmnt) | l(n.StmntList, n.Stmnt),
 	n.Stmnt: /*l(n.StmntType, n.StmntBody) |*/ l(n.ExprStmnt, T.SemiCol),
 
 	n.ExprStmnt: Any(n.ReturnStmnt, n.AssignStmnt, n.VarDecl, n.FuncCall),
@@ -152,11 +165,21 @@ enum Rule[NonTerm.max+1] grammarTable = [
 	n.FuncCall: l(T.Ident, T.LParen, n.CallArgs, T.RParen),
 	n.CallArgs: l(n.Expr) | l(n.CallArgs, T.Comma, n.Expr) | l(null),
 
-	n.Expr: Any(n.Term, n.Plus, n.FuncCall),
-	n.Term: Any(T.NumLit, T.StrLit, n.Var),
-	n.Plus: l(n.Expr, T.Plus, n.Term),
+	n.Expr: Any(n.Add, n.Sub, n.Term),
+
+	n.Add: l(n.Expr, T.Plus, n.Term),
+	n.Sub: l(n.Expr, T.Minus, n.Term),
+
+	n.Term: Any(n.Mult, n.Div, n.Parens),
+
+	n.Mult: l(n.Term, T.Star, n.Parens),
+	n.Div: l(n.Term, T.Slash, n.Parens),
+
+	n.Parens: l(T.LParen, n.Expr, T.RParen) | l(n.Literal),
+
+	n.Literal: Any(n.FuncCall, T.NumLit, T.StrLit, n.Var),
 	n.Var: l(T.Ident),
-	n.Type: Any(T.tVoid, T.i32, T.i64, T.str),
+	n.Type: Any(T.voidT, T.i32, T.i64, T.str),
 ];
 
 struct Variable {

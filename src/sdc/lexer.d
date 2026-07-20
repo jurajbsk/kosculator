@@ -10,17 +10,23 @@ immutable Token[char.max] resSymbols = [
 	')': T.RParen,
 	',': T.Comma,
 	';': T.SemiCol,
+	'*': T.Star,
+	'/': T.Slash,
 	'=': T.Assign,
 	'+': T.Plus,
+	'-': T.Minus,
 ];
 immutable string[] resKeywords = [
 	T.Module: "module",
 	T.Import: "import",
 	T.Return: "return",
-	T.tVoid: "void",
+	T.voidT: "void",
 	T.i32: "int",
 	T.i64: "long",
 	T.str: "string",
+	T.pvoid: "void*",
+	T.i32p: "int*",
+	T.i64p: "long*",
 ];
 
 struct Tokenizer {
@@ -47,7 +53,6 @@ struct Tokenizer {
 			}
 			else if(length == 1) {
 				if(isSymbol) {
-
 					break;
 				}
 				else if(lastChar == '\n') {
